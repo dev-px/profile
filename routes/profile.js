@@ -20,10 +20,6 @@ router.post(
     { name: "websiteFavicon", maxCount: 1 },
   ]), validateProfile,
   profileController.profile
-)
-.get("/data/:profileData", (req,res) => {
-  const data = req.params.profileData;
-  res.render({data})
-});
+);
 
 exports.router = router;
