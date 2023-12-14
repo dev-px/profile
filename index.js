@@ -14,7 +14,7 @@ mongoose.connect(process.env.DB_URI).then(() => {
 server.use(morgan("tiny"));
 server.use(express.json());
 server.use("/profile", profileRouter);
-server.use("/", authRouter);
+server.use("/auth", authRouter);
 server.use("/", userRouter);
 
 server.listen(process.env.PORT, () => {
