@@ -31,14 +31,27 @@ exports.userSignup = async (req, res) => {
 
     const result = await data.save();
 
+
     const token = jwt.sign({ result }, process.env.JWTKEY, {
       expiresIn: "600s",
+
+  data.save()
+    .then((result) => {
+      jwt.sign({ result }, process.env.JWTKEY,{ expiresIn: "500s" }, (err, token) => {
+          res.status(201).json(data);
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({code:500, error: "Internal Server Error" });
+
     });
 
     res.status(201).json(token);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({code:500, error: "Internal Server Error" });
   }
 };
 
@@ -48,7 +61,7 @@ exports.userLogin = async (req, res) => {
     const data = await User.findOne({ email: req.body.email });
 
     if (!data) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({code:404, error: "User not found" });
     }
 
     let textParts = data.password.split(":");
@@ -69,10 +82,10 @@ exports.userLogin = async (req, res) => {
       });
       res.status(200).json(token);
     } else {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({code:500, error: "Invalid credentials" });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({code:500, error: "Internal Server Error" });
   }
 };
