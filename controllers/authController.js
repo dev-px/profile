@@ -31,7 +31,7 @@ exports.userSignup = (req, res) => {
   data.save()
     .then((result) => {
       jwt.sign({ result }, process.env.JWTKEY,{ expiresIn: "500s" }, (err, token) => {
-          res.status(201).json(token);
+          res.status(201).json(data);
         }
       );
     })
